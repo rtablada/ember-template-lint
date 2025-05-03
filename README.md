@@ -3,38 +3,34 @@
 [![npm version](https://badge.fury.io/js/ember-template-lint.svg)](https://badge.fury.io/js/ember-template-lint)
 [![Build Status](https://github.com/ember-template-lint/ember-template-lint/workflows/CI/badge.svg)](https://github.com/ember-template-lint/ember-template-lint/actions?query=workflow%3ACI)
 
-ember-template-lint will lint your handlebars template and return error results.
+`ember-template-lint` is a library that will lint your handlebars template and return error results.
 
-For example, given the rule [`no-bare-strings`](docs/rule/no-bare-strings.md) is enabled, this template would be
+For example, if the rule [`no-bare-strings`](docs/rule/no-bare-strings.md) is enabled, this template would be
 in violation:
 
 ```hbs
-{{!-- app/components/my-thing/template.hbs  --}}
+{{! app/components/my-thing/template.hbs  }}
 <div>A bare string</div>
 ```
 
 When the `ember-template-lint` executable is run, we would have a single result indicating that
 the `no-bare-strings` rule found an error.
 
+## Requirements
+
+- [Node.js](https://nodejs.org/) `^18.18.0 || ^20.9.0 || >=21.1.0`
+
 ## Installation
-
-This addon is installed by default with new Ember apps, so check your package.json before installing to see if you need to install it.
-
-To install ember-template-lint
-
-With npm:
 
 ```bash
 npm install --save-dev ember-template-lint
 ```
 
-With yarn:
-
 ```bash
-yarn add ember-template-lint --dev
+yarn add --dev ember-template-lint
 ```
 
-Node.js `10 || 12 || >=14` is required.
+Note: this library is installed by default with new Ember apps.
 
 ## Usage
 
@@ -48,119 +44,9 @@ ember-template-lint .
 
 ### Workflow Examples
 
-Basic usage with a single file
+See documentation on [workflow examples](docs/workflow.md).
 
-```bash
-ember-template-lint "app/templates/application.hbs"
-```
-
-Output errors with source description
-
-```bash
-ember-template-lint "app/templates/application.hbs" --verbose
-```
-
-Multiple file/directory/wildcard paths are accepted
-
-```bash
-ember-template-lint "app/templates/components/**/*" "app/templates/application.hbs"
-```
-
-Output errors as pretty-printed JSON string
-
-```bash
-ember-template-lint "app/templates/application.hbs" --json
-```
-
-Ignore warnings / only report errors
-
-```bash
-ember-template-lint "app/templates/application.hbs" --quiet
-```
-
-Convert errors to TODOs in order to resolve at a later date
-
-```bash
-ember-template-lint . --update-todo
-```
-
-Number of warnings to trigger nonzero exit code
-
-```bash
-ember-template-lint "app/templates/application.hbs" --max-warnings=2
-```
-
-Define custom config path
-
-Include TODOs with other output results
-
-```bash
-ember-template-lint . --include-todo
-```
-
-Define custom config path
-
-```bash
-ember-template-lint "app/templates/application.hbs" --config-path .my-template-lintrc.js
-```
-
-Read from stdin
-
-```bash
-ember-template-lint --filename app/templates/application.hbs < app/templates/application.hbs
-```
-
-Specify custom ignore pattern `['**/dist/**', '**/tmp/**', '**/node_modules/**']` by default
-
-```bash
-ember-template-lint "/tmp/template.hbs" --ignore-pattern "**/foo/**" --ignore-pattern "**/bar/**"
-```
-
-Disable ignore pattern entirely
-
-```bash
-ember-template-lint "/tmp/template.hbs" --no-ignore-pattern
-```
-
-Running a single rule without options
-
-```bash
-ember-template-lint --no-config-path app/templates --rule 'no-implicit-this:error'
-```
-
-Running a single rule with options
-
-```bash
-ember-template-lint --no-config-path app/templates --rule 'no-implicit-this:["error", { "allow": ["some-helper"] }]'
-```
-
-Running a single rule, disabling inline configuration
-
-```bash
-ember-template-lint --no-config-path app/templates --rule 'no-implicit-this:error' --no-inline-config
-```
-
-Specify a config object to use instead of what exists locally
-
-```bash
-ember-template-lint --config '{ "rules": { "no-implicit-this": { "severity": 2, "config": true } } }' test/fixtures/no-implicit-this-allow-with-regexp/app/templates
-```
-
-Provide a custom formatter from a relative path
-
-```bash
-ember-template-lint --format ./my-shwanky-formatter.js
-```
-
-Provide a custom formatter from a formatter package
-
-```bash
-ember-template-lint --format ember-template-lint-formatter-snazzy
-```
-
-:bulb: Ensure you wrap all glob patterns in quotes so that it won't be interpreted by the CLI. `ember-template-lint app/templates/**` (this will expand all paths in app/templates) and `ember-template-lint "app/templates/**"` (this will pass the glob to ember-template-lint and not interpret the glob).
-
-For more information about the todo functionality, see [the documentation](docs/todos.md).
+See documentation on the [todo functionality](docs/todos.md).
 
 ## Configuration
 
@@ -184,120 +70,146 @@ For more detailed information see [configuration](docs/configuration.md).
 
 ### Presets
 
-|                    | Name                                     | Description                                                                                                                                                                                                                                                                          |
-| :----------------- | :--------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| :white_check_mark: | [recommended](lib/config/recommended.js) | enables the recommended rules                                                                                                                                                                                                                                                        |
-| :nail_care:        | [stylistic](lib/config/stylistic.js)     | enables stylistic rules for those who aren't ready to adopt [ember-template-lint-plugin-prettier](https://github.com/ember-template-lint/ember-template-lint-plugin-prettier) (including stylistic rules that were previously in the `recommended` preset in ember-template-lint v1) |
+|     | Name                                     | Description                                                                                                                                                                                                                                                                                     |
+| :-- | :--------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ✅  | [recommended](lib/config/recommended.js) | Enables the recommended rules.                                                                                                                                                                                                                                                                  |
+| 💅  | [stylistic](lib/config/stylistic.js)     | Enables stylistic rules for those who aren't ready to adopt [ember-template-lint-plugin-prettier](https://github.com/ember-template-lint/ember-template-lint-plugin-prettier) (including stylistic rules that were previously in the `recommended` preset in ember-template-lint v1).           |
+| ⌨️  | [a11y](lib/config/a11y.js)               | Enables A11Y rules. Its goal is to include **all** A11Y related rules, therefore it does not follow the same SemVer policy as the other presets. Please see [versioning](https://github.com/ember-template-lint/ember-template-lint/blob/master/dev/versioning.md#exemptions) for more details. |
 
 ## Rules
 
 Each rule has emojis denoting:
 
 - what configuration it belongs to
-- :wrench: if some problems reported by the rule are automatically fixable by the `--fix` command line option
+- 🔧 if some problems reported by the rule are automatically fixable by the `--fix` command line option
 
 <!--RULES_TABLE_START-->
 
-|                            | Rule ID                                                                                                   |
-| :------------------------- | :-------------------------------------------------------------------------------------------------------- |
-|                            | [attribute-indentation](./docs/rule/attribute-indentation.md)                                             |
-| :nail_care:                | [block-indentation](./docs/rule/block-indentation.md)                                                     |
-| :white_check_mark:         | [builtin-component-arguments](./docs/rule/builtin-component-arguments.md)                                 |
-|                            | [deprecated-each-syntax](./docs/rule/deprecated-each-syntax.md)                                           |
-| :white_check_mark:         | [deprecated-inline-view-helper](./docs/rule/deprecated-inline-view-helper.md)                             |
-| :white_check_mark:         | [deprecated-render-helper](./docs/rule/deprecated-render-helper.md)                                       |
-| :nail_care:                | [eol-last](./docs/rule/eol-last.md)                                                                       |
-| :wrench:                   | [inline-link-to](./docs/rule/inline-link-to.md)                                                           |
-| :nail_care:                | [linebreak-style](./docs/rule/linebreak-style.md)                                                         |
-| :white_check_mark:         | [link-href-attributes](./docs/rule/link-href-attributes.md)                                               |
-| :white_check_mark::wrench: | [link-rel-noopener](./docs/rule/link-rel-noopener.md)                                                     |
-| :nail_care:                | [modifier-name-case](./docs/rule/modifier-name-case.md)                                                   |
-| :white_check_mark:         | [no-abstract-roles](./docs/rule/no-abstract-roles.md)                                                     |
-| :white_check_mark::wrench: | [no-accesskey-attribute](./docs/rule/no-accesskey-attribute.md)                                           |
-| :white_check_mark:         | [no-action](./docs/rule/no-action.md)                                                                     |
-|                            | [no-action-modifiers](./docs/rule/no-action-modifiers.md)                                                 |
-| :white_check_mark:         | [no-args-paths](./docs/rule/no-args-paths.md)                                                             |
-| :white_check_mark:         | [no-arguments-for-html-elements](./docs/rule/no-arguments-for-html-elements.md)                           |
-| :white_check_mark::wrench: | [no-aria-hidden-body](./docs/rule/no-aria-hidden-body.md)                                                 |
-| :white_check_mark:         | [no-attrs-in-components](./docs/rule/no-attrs-in-components.md)                                           |
-|                            | [no-bare-strings](./docs/rule/no-bare-strings.md)                                                         |
-| :white_check_mark:         | [no-block-params-for-html-elements](./docs/rule/no-block-params-for-html-elements.md)                     |
-|                            | [no-capital-arguments](./docs/rule/no-capital-arguments.md)                                               |
-|                            | [no-class-bindings](./docs/rule/no-class-bindings.md)                                                     |
-| :white_check_mark::wrench: | [no-curly-component-invocation](./docs/rule/no-curly-component-invocation.md)                             |
-| :white_check_mark:         | [no-debugger](./docs/rule/no-debugger.md)                                                                 |
-| :white_check_mark:         | [no-down-event-binding](./docs/rule/no-down-event-binding.md)                                             |
-| :white_check_mark:         | [no-duplicate-attributes](./docs/rule/no-duplicate-attributes.md)                                         |
-| :white_check_mark:         | [no-duplicate-id](./docs/rule/no-duplicate-id.md)                                                         |
-| :white_check_mark:         | [no-duplicate-landmark-elements](./docs/rule/no-duplicate-landmark-elements.md)                           |
-|                            | [no-dynamic-subexpression-invocations](./docs/rule/no-dynamic-subexpression-invocations.md)               |
-|                            | [no-element-event-actions](./docs/rule/no-element-event-actions.md)                                       |
-| :white_check_mark:         | [no-extra-mut-helper-argument](./docs/rule/no-extra-mut-helper-argument.md)                               |
-| :white_check_mark:         | [no-forbidden-elements](./docs/rule/no-forbidden-elements.md)                                             |
-| :white_check_mark:         | [no-heading-inside-button](./docs/rule/no-heading-inside-button.md)                                       |
-| :white_check_mark:         | [no-html-comments](./docs/rule/no-html-comments.md)                                                       |
-| :white_check_mark:         | [no-implicit-this](./docs/rule/no-implicit-this.md)                                                       |
-| :white_check_mark:         | [no-index-component-invocation](./docs/rule/no-index-component-invocation.md)                             |
-| :white_check_mark:         | [no-inline-styles](./docs/rule/no-inline-styles.md)                                                       |
-| :white_check_mark:         | [no-input-block](./docs/rule/no-input-block.md)                                                           |
-| :white_check_mark:         | [no-input-tagname](./docs/rule/no-input-tagname.md)                                                       |
-| :white_check_mark:         | [no-invalid-block-param-definition](./docs/rule/no-invalid-block-param-definition.md)                     |
-| :white_check_mark:         | [no-invalid-interactive](./docs/rule/no-invalid-interactive.md)                                           |
-| :white_check_mark:         | [no-invalid-link-text](./docs/rule/no-invalid-link-text.md)                                               |
-| :white_check_mark:         | [no-invalid-link-title](./docs/rule/no-invalid-link-title.md)                                             |
-| :white_check_mark:         | [no-invalid-meta](./docs/rule/no-invalid-meta.md)                                                         |
-| :white_check_mark:         | [no-invalid-role](./docs/rule/no-invalid-role.md)                                                         |
-| :white_check_mark:         | [no-link-to-positional-params](./docs/rule/no-link-to-positional-params.md)                               |
-|                            | [no-link-to-tagname](./docs/rule/no-link-to-tagname.md)                                                   |
-| :white_check_mark:         | [no-log](./docs/rule/no-log.md)                                                                           |
-| :wrench:                   | [no-model-argument-in-route-templates](./docs/rule/no-model-argument-in-route-templates.md)               |
-| :nail_care:                | [no-multiple-empty-lines](./docs/rule/no-multiple-empty-lines.md)                                         |
-|                            | [no-mut-helper](./docs/rule/no-mut-helper.md)                                                             |
-| :white_check_mark:         | [no-negated-condition](./docs/rule/no-negated-condition.md)                                               |
-| :white_check_mark:         | [no-nested-interactive](./docs/rule/no-nested-interactive.md)                                             |
-| :white_check_mark:         | [no-nested-landmark](./docs/rule/no-nested-landmark.md)                                                   |
-| :white_check_mark:         | [no-nested-splattributes](./docs/rule/no-nested-splattributes.md)                                         |
-| :white_check_mark:         | [no-obsolete-elements](./docs/rule/no-obsolete-elements.md)                                               |
-| :white_check_mark:         | [no-outlet-outside-routes](./docs/rule/no-outlet-outside-routes.md)                                       |
-| :white_check_mark:         | [no-partial](./docs/rule/no-partial.md)                                                                   |
-| :white_check_mark:         | [no-passed-in-event-handlers](./docs/rule/no-passed-in-event-handlers.md)                                 |
-| :white_check_mark::wrench: | [no-positional-data-test-selectors](./docs/rule/no-positional-data-test-selectors.md)                     |
-| :white_check_mark:         | [no-positive-tabindex](./docs/rule/no-positive-tabindex.md)                                               |
-| :white_check_mark:         | [no-potential-path-strings](./docs/rule/no-potential-path-strings.md)                                     |
-| :white_check_mark:         | [no-quoteless-attributes](./docs/rule/no-quoteless-attributes.md)                                         |
-| :white_check_mark::wrench: | [no-redundant-fn](./docs/rule/no-redundant-fn.md)                                                         |
-| :white_check_mark::wrench: | [no-redundant-landmark-role](./docs/rule/no-redundant-landmark-role.md)                                   |
-|                            | [no-restricted-invocations](./docs/rule/no-restricted-invocations.md)                                     |
-| :white_check_mark:         | [no-shadowed-elements](./docs/rule/no-shadowed-elements.md)                                               |
-| :wrench:                   | [no-this-in-template-only-components](./docs/rule/no-this-in-template-only-components.md)                 |
-| :nail_care:                | [no-trailing-spaces](./docs/rule/no-trailing-spaces.md)                                                   |
-| :white_check_mark:         | [no-triple-curlies](./docs/rule/no-triple-curlies.md)                                                     |
-| :white_check_mark:         | [no-unbalanced-curlies](./docs/rule/no-unbalanced-curlies.md)                                             |
-| :white_check_mark:         | [no-unbound](./docs/rule/no-unbound.md)                                                                   |
-| :white_check_mark:         | [no-unknown-arguments-for-builtin-components](./docs/rule/no-unknown-arguments-for-builtin-components.md) |
-| :white_check_mark:         | [no-unnecessary-component-helper](./docs/rule/no-unnecessary-component-helper.md)                         |
-| :nail_care:                | [no-unnecessary-concat](./docs/rule/no-unnecessary-concat.md)                                             |
-| :white_check_mark:         | [no-unused-block-params](./docs/rule/no-unused-block-params.md)                                           |
-| :nail_care:                | [no-whitespace-for-layout](./docs/rule/no-whitespace-for-layout.md)                                       |
-| :nail_care:                | [no-whitespace-within-word](./docs/rule/no-whitespace-within-word.md)                                     |
-| :white_check_mark:         | [no-yield-only](./docs/rule/no-yield-only.md)                                                             |
-|                            | [no-yield-to-default](./docs/rule/no-yield-to-default.md)                                                 |
-| :nail_care:                | [quotes](./docs/rule/quotes.md)                                                                           |
-| :white_check_mark::wrench: | [require-button-type](./docs/rule/require-button-type.md)                                                 |
-|                            | [require-each-key](./docs/rule/require-each-key.md)                                                       |
-|                            | [require-form-method](./docs/rule/require-form-method.md)                                                 |
-| :white_check_mark::wrench: | [require-has-block-helper](./docs/rule/require-has-block-helper.md)                                       |
-| :white_check_mark:         | [require-iframe-title](./docs/rule/require-iframe-title.md)                                               |
-| :white_check_mark:         | [require-input-label](./docs/rule/require-input-label.md)                                                 |
-| :white_check_mark:         | [require-lang-attribute](./docs/rule/require-lang-attribute.md)                                           |
-|                            | [require-splattributes](./docs/rule/require-splattributes.md)                                             |
-| :white_check_mark:         | [require-valid-alt-text](./docs/rule/require-valid-alt-text.md)                                           |
-| :nail_care:                | [self-closing-void-elements](./docs/rule/self-closing-void-elements.md)                                   |
-| :white_check_mark:         | [simple-unless](./docs/rule/simple-unless.md)                                                             |
-| :white_check_mark:         | [splat-attributes-only](./docs/rule/splat-attributes-only.md)                                             |
-| :white_check_mark:         | [style-concatenation](./docs/rule/style-concatenation.md)                                                 |
-| :white_check_mark:         | [table-groups](./docs/rule/table-groups.md)                                                               |
-|                            | [template-length](./docs/rule/template-length.md)                                                         |
+| Name                                                                                                      | ✅  | 💅  | ⌨️  | 🔧  |
+| :-------------------------------------------------------------------------------------------------------- | :-- | :-- | :-- | --- |
+| [attribute-indentation](./docs/rule/attribute-indentation.md)                                             |     |     |     |     |
+| [attribute-order](./docs/rule/attribute-order.md)                                                         |     |     |     | 🔧  |
+| [block-indentation](./docs/rule/block-indentation.md)                                                     |     | 💅  |     | 🔧  |
+| [builtin-component-arguments](./docs/rule/builtin-component-arguments.md)                                 | ✅  |     |     |     |
+| [deprecated-inline-view-helper](./docs/rule/deprecated-inline-view-helper.md)                             | ✅  |     |     |     |
+| [deprecated-render-helper](./docs/rule/deprecated-render-helper.md)                                       | ✅  |     |     |     |
+| [eol-last](./docs/rule/eol-last.md)                                                                       |     | 💅  |     | 🔧  |
+| [inline-link-to](./docs/rule/inline-link-to.md)                                                           |     |     |     | 🔧  |
+| [linebreak-style](./docs/rule/linebreak-style.md)                                                         |     | 💅  |     |     |
+| [link-href-attributes](./docs/rule/link-href-attributes.md)                                               | ✅  |     | ⌨️  |     |
+| [link-rel-noopener](./docs/rule/link-rel-noopener.md)                                                     | ✅  |     |     | 🔧  |
+| [modifier-name-case](./docs/rule/modifier-name-case.md)                                                   |     | 💅  |     | 🔧  |
+| [no-abstract-roles](./docs/rule/no-abstract-roles.md)                                                     | ✅  |     | ⌨️  |     |
+| [no-accesskey-attribute](./docs/rule/no-accesskey-attribute.md)                                           | ✅  |     | ⌨️  | 🔧  |
+| [no-action](./docs/rule/no-action.md)                                                                     | ✅  |     |     |     |
+| [no-action-modifiers](./docs/rule/no-action-modifiers.md)                                                 |     |     |     | 🔧  |
+| [no-action-on-submit-button](./docs/rule/no-action-on-submit-button.md)                                   | ✅  |     |     |     |
+| [no-args-paths](./docs/rule/no-args-paths.md)                                                             | ✅  |     |     |     |
+| [no-arguments-for-html-elements](./docs/rule/no-arguments-for-html-elements.md)                           | ✅  |     |     |     |
+| [no-aria-hidden-body](./docs/rule/no-aria-hidden-body.md)                                                 | ✅  |     | ⌨️  | 🔧  |
+| [no-aria-unsupported-elements](./docs/rule/no-aria-unsupported-elements.md)                               | ✅  |     | ⌨️  |     |
+| [no-array-prototype-extensions](./docs/rule/no-array-prototype-extensions.md)                             | ✅  |     |     | 🔧  |
+| [no-at-ember-render-modifiers](./docs/rule/no-at-ember-render-modifiers.md)                               | ✅  |     |     |     |
+| [no-attrs-in-components](./docs/rule/no-attrs-in-components.md)                                           | ✅  |     |     |     |
+| [no-autofocus-attribute](./docs/rule/no-autofocus-attribute.md)                                           | ✅  |     | ⌨️  |     |
+| [no-bare-strings](./docs/rule/no-bare-strings.md)                                                         |     |     |     |     |
+| [no-block-params-for-html-elements](./docs/rule/no-block-params-for-html-elements.md)                     | ✅  |     |     |     |
+| [no-builtin-form-components](./docs/rule/no-builtin-form-components.md)                                   | ✅  |     |     |     |
+| [no-capital-arguments](./docs/rule/no-capital-arguments.md)                                               | ✅  |     |     |     |
+| [no-class-bindings](./docs/rule/no-class-bindings.md)                                                     | ✅  |     |     |     |
+| [no-curly-component-invocation](./docs/rule/no-curly-component-invocation.md)                             | ✅  |     |     | 🔧  |
+| [no-debugger](./docs/rule/no-debugger.md)                                                                 | ✅  |     |     |     |
+| [no-duplicate-attributes](./docs/rule/no-duplicate-attributes.md)                                         | ✅  |     | ⌨️  | 🔧  |
+| [no-duplicate-id](./docs/rule/no-duplicate-id.md)                                                         | ✅  |     | ⌨️  |     |
+| [no-duplicate-landmark-elements](./docs/rule/no-duplicate-landmark-elements.md)                           | ✅  |     | ⌨️  |     |
+| [no-dynamic-subexpression-invocations](./docs/rule/no-dynamic-subexpression-invocations.md)               |     |     |     |     |
+| [no-element-event-actions](./docs/rule/no-element-event-actions.md)                                       |     |     |     |     |
+| [no-empty-headings](./docs/rule/no-empty-headings.md)                                                     | ✅  |     | ⌨️  |     |
+| [no-extra-mut-helper-argument](./docs/rule/no-extra-mut-helper-argument.md)                               | ✅  |     |     |     |
+| [no-forbidden-elements](./docs/rule/no-forbidden-elements.md)                                             | ✅  |     |     |     |
+| [no-heading-inside-button](./docs/rule/no-heading-inside-button.md)                                       | ✅  |     | ⌨️  |     |
+| [no-html-comments](./docs/rule/no-html-comments.md)                                                       | ✅  |     |     | 🔧  |
+| [no-implicit-this](./docs/rule/no-implicit-this.md)                                                       | ✅  |     |     |     |
+| [no-index-component-invocation](./docs/rule/no-index-component-invocation.md)                             | ✅  |     |     |     |
+| [no-inline-styles](./docs/rule/no-inline-styles.md)                                                       | ✅  |     |     |     |
+| [no-input-block](./docs/rule/no-input-block.md)                                                           | ✅  |     |     |     |
+| [no-input-tagname](./docs/rule/no-input-tagname.md)                                                       | ✅  |     |     |     |
+| [no-invalid-aria-attributes](./docs/rule/no-invalid-aria-attributes.md)                                   | ✅  |     | ⌨️  |     |
+| [no-invalid-interactive](./docs/rule/no-invalid-interactive.md)                                           | ✅  |     | ⌨️  |     |
+| [no-invalid-link-text](./docs/rule/no-invalid-link-text.md)                                               | ✅  |     | ⌨️  |     |
+| [no-invalid-link-title](./docs/rule/no-invalid-link-title.md)                                             | ✅  |     | ⌨️  |     |
+| [no-invalid-meta](./docs/rule/no-invalid-meta.md)                                                         | ✅  |     | ⌨️  |     |
+| [no-invalid-role](./docs/rule/no-invalid-role.md)                                                         | ✅  |     | ⌨️  |     |
+| [no-jsx-attributes](./docs/rule/no-jsx-attributes.md)                                                     |     |     |     | 🔧  |
+| [no-link-to-positional-params](./docs/rule/no-link-to-positional-params.md)                               | ✅  |     |     |     |
+| [no-link-to-tagname](./docs/rule/no-link-to-tagname.md)                                                   | ✅  |     |     |     |
+| [no-log](./docs/rule/no-log.md)                                                                           | ✅  |     |     |     |
+| [no-model-argument-in-route-templates](./docs/rule/no-model-argument-in-route-templates.md)               |     |     |     | 🔧  |
+| [no-multiple-empty-lines](./docs/rule/no-multiple-empty-lines.md)                                         |     | 💅  |     | 🔧  |
+| [no-mut-helper](./docs/rule/no-mut-helper.md)                                                             |     |     |     |     |
+| [no-negated-condition](./docs/rule/no-negated-condition.md)                                               | ✅  |     |     | 🔧  |
+| [no-nested-interactive](./docs/rule/no-nested-interactive.md)                                             | ✅  |     | ⌨️  |     |
+| [no-nested-landmark](./docs/rule/no-nested-landmark.md)                                                   | ✅  |     | ⌨️  |     |
+| [no-nested-splattributes](./docs/rule/no-nested-splattributes.md)                                         | ✅  |     |     |     |
+| [no-obscure-array-access](./docs/rule/no-obscure-array-access.md)                                         | ✅  |     |     | 🔧  |
+| [no-obsolete-elements](./docs/rule/no-obsolete-elements.md)                                               | ✅  |     | ⌨️  |     |
+| [no-outlet-outside-routes](./docs/rule/no-outlet-outside-routes.md)                                       | ✅  |     |     |     |
+| [no-partial](./docs/rule/no-partial.md)                                                                   | ✅  |     |     |     |
+| [no-passed-in-event-handlers](./docs/rule/no-passed-in-event-handlers.md)                                 | ✅  |     |     |     |
+| [no-pointer-down-event-binding](./docs/rule/no-pointer-down-event-binding.md)                             | ✅  |     | ⌨️  |     |
+| [no-positional-data-test-selectors](./docs/rule/no-positional-data-test-selectors.md)                     | ✅  |     |     | 🔧  |
+| [no-positive-tabindex](./docs/rule/no-positive-tabindex.md)                                               | ✅  |     | ⌨️  |     |
+| [no-potential-path-strings](./docs/rule/no-potential-path-strings.md)                                     | ✅  |     |     |     |
+| [no-quoteless-attributes](./docs/rule/no-quoteless-attributes.md)                                         | ✅  |     |     | 🔧  |
+| [no-redundant-fn](./docs/rule/no-redundant-fn.md)                                                         | ✅  |     |     | 🔧  |
+| [no-redundant-role](./docs/rule/no-redundant-role.md)                                                     | ✅  |     | ⌨️  | 🔧  |
+| [no-restricted-invocations](./docs/rule/no-restricted-invocations.md)                                     |     |     |     |     |
+| [no-route-action](./docs/rule/no-route-action.md)                                                         | ✅  |     |     |     |
+| [no-scope-outside-table-headings](./docs/rule/no-scope-outside-table-headings.md)                         | ✅  |     | ⌨️  |     |
+| [no-shadowed-elements](./docs/rule/no-shadowed-elements.md)                                               | ✅  |     |     |     |
+| [no-splattributes-with-class](./docs/rule/no-splattributes-with-class.md)                                 |     |     |     |     |
+| [no-this-in-template-only-components](./docs/rule/no-this-in-template-only-components.md)                 |     |     |     | 🔧  |
+| [no-trailing-spaces](./docs/rule/no-trailing-spaces.md)                                                   |     | 💅  |     | 🔧  |
+| [no-triple-curlies](./docs/rule/no-triple-curlies.md)                                                     | ✅  |     |     |     |
+| [no-unbalanced-curlies](./docs/rule/no-unbalanced-curlies.md)                                             | ✅  |     |     |     |
+| [no-unbound](./docs/rule/no-unbound.md)                                                                   | ✅  |     |     |     |
+| [no-unknown-arguments-for-builtin-components](./docs/rule/no-unknown-arguments-for-builtin-components.md) | ✅  |     |     | 🔧  |
+| [no-unnecessary-component-helper](./docs/rule/no-unnecessary-component-helper.md)                         | ✅  |     |     | 🔧  |
+| [no-unnecessary-concat](./docs/rule/no-unnecessary-concat.md)                                             |     | 💅  |     | 🔧  |
+| [no-unnecessary-curly-parens](./docs/rule/no-unnecessary-curly-parens.md)                                 | ✅  |     |     | 🔧  |
+| [no-unnecessary-curly-strings](./docs/rule/no-unnecessary-curly-strings.md)                               | ✅  |     |     | 🔧  |
+| [no-unsupported-role-attributes](./docs/rule/no-unsupported-role-attributes.md)                           | ✅  |     | ⌨️  | 🔧  |
+| [no-unused-block-params](./docs/rule/no-unused-block-params.md)                                           | ✅  |     |     |     |
+| [no-valueless-arguments](./docs/rule/no-valueless-arguments.md)                                           | ✅  |     |     |     |
+| [no-whitespace-for-layout](./docs/rule/no-whitespace-for-layout.md)                                       | ✅  |     | ⌨️  |     |
+| [no-whitespace-within-word](./docs/rule/no-whitespace-within-word.md)                                     | ✅  |     | ⌨️  |     |
+| [no-with](./docs/rule/no-with.md)                                                                         | ✅  |     |     |     |
+| [no-yield-only](./docs/rule/no-yield-only.md)                                                             | ✅  |     |     |     |
+| [no-yield-to-default](./docs/rule/no-yield-to-default.md)                                                 | ✅  |     |     |     |
+| [quotes](./docs/rule/quotes.md)                                                                           |     | 💅  |     | 🔧  |
+| [require-aria-activedescendant-tabindex](./docs/rule/require-aria-activedescendant-tabindex.md)           | ✅  |     | ⌨️  |     |
+| [require-button-type](./docs/rule/require-button-type.md)                                                 | ✅  |     |     | 🔧  |
+| [require-context-role](./docs/rule/require-context-role.md)                                               | ✅  |     | ⌨️  |     |
+| [require-each-key](./docs/rule/require-each-key.md)                                                       |     |     |     |     |
+| [require-form-method](./docs/rule/require-form-method.md)                                                 |     |     |     |     |
+| [require-has-block-helper](./docs/rule/require-has-block-helper.md)                                       | ✅  |     |     | 🔧  |
+| [require-iframe-title](./docs/rule/require-iframe-title.md)                                               | ✅  |     | ⌨️  |     |
+| [require-input-label](./docs/rule/require-input-label.md)                                                 | ✅  |     | ⌨️  |     |
+| [require-lang-attribute](./docs/rule/require-lang-attribute.md)                                           | ✅  |     | ⌨️  |     |
+| [require-mandatory-role-attributes](./docs/rule/require-mandatory-role-attributes.md)                     | ✅  |     | ⌨️  |     |
+| [require-media-caption](./docs/rule/require-media-caption.md)                                             | ✅  |     | ⌨️  |     |
+| [require-presentational-children](./docs/rule/require-presentational-children.md)                         | ✅  |     | ⌨️  |     |
+| [require-splattributes](./docs/rule/require-splattributes.md)                                             |     |     |     |     |
+| [require-strict-mode](./docs/rule/require-strict-mode.md)                                                 |     |     |     |     |
+| [require-valid-alt-text](./docs/rule/require-valid-alt-text.md)                                           | ✅  |     | ⌨️  |     |
+| [require-valid-named-block-naming-format](./docs/rule/require-valid-named-block-naming-format.md)         | ✅  |     |     | 🔧  |
+| [self-closing-void-elements](./docs/rule/self-closing-void-elements.md)                                   |     | 💅  |     | 🔧  |
+| [simple-modifiers](./docs/rule/simple-modifiers.md)                                                       | ✅  |     |     |     |
+| [simple-unless](./docs/rule/simple-unless.md)                                                             | ✅  |     |     | 🔧  |
+| [splat-attributes-only](./docs/rule/splat-attributes-only.md)                                             | ✅  |     |     |     |
+| [style-concatenation](./docs/rule/style-concatenation.md)                                                 | ✅  |     |     |     |
+| [table-groups](./docs/rule/table-groups.md)                                                               | ✅  |     | ⌨️  |     |
+| [template-length](./docs/rule/template-length.md)                                                         |     |     |     |     |
 
 <!--RULES_TABLE_END-->
 

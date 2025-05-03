@@ -1,0 +1,23 @@
+import Rule from './_base.js';
+
+export const ERROR_MESSAGE = 'TODO';
+
+export default class <%- titleCase %> extends Rule {
+  visitor() {
+    return {
+      // Simple template example: disallowed text present in TextNode
+      TextNode(node) {
+        let source = this.sourceForNode(node);
+        let disallowedText = 'DisallowedText';
+        let failingCondition = source.includes(disallowedText);
+
+        if (failingCondition) {
+          this.log({
+            message: ERROR_MESSAGE,
+            node,
+          });
+        }
+      },
+    };
+  }
+}
